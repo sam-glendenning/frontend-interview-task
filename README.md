@@ -32,7 +32,10 @@ Consider opportunities to reduce repetition in the code and increase legibility
 We also ask that you update the readme with answers to the following questions 
 
 1. Given more time, what other changes you would have liked to make?
+   ANSWER: The CSS looks good but may not be entirely robust. As the position of the green labels is 'absolute', this may mean it runs into some design problems if other elements are placed in or around it. As well as this, the formatting on the bold originalPurchasePrice value looks a little off and I wasn't able to correctly space it out from the rest of the words. Given time I could probably fix this with some googling but I didn't want to spend too much time on this.
 2. What UX or design improvements or alterations might you suggest? These can be to existing components or completely new ideas.
+   ANSWER: having worked with the Material-UI library extensively, I can recommend it for working with standard components that can be customised and styled heavily while also providing lots of out-of-the-box functionality for handling user interaction via props, onChange functions and various others.
+   I would also suggest sorting the headings and sections into collapsible menus which are closed by default. The user can then click on, for example, Mortgage, to expand the details on their mortgage. This helps to provide the user with all information on what details they can view without overwhelming them with all of it at once. It also means they don't have to scroll far down the page to find the information they want.
 
 ----
 

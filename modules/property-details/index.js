@@ -4,9 +4,20 @@ import React from "react";
 import { Button } from "../../components/button";
 import RowContainer from "../../components/row-container";
 import {
-  AccountHeadline, AccountLabel, AccountList, AccountListItem, AccountSection, InfoText, Inset
+  AccountHeadline, AccountLabel, BoldInfoText, AccountList, AccountListItem, AccountSection, InfoText, Inset, Label
 } from "./style";
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+// Modified version of function taken from https://www.tutsmake.com/javascript-difference-between-two-dates-in-years-months-days/
+// Ensures that only full years are counted as part of the calculation
+function yearDiff(dt1, dt2) {
+  var diffYear = (dt2.getTime() - dt1.getTime()) / 1000;
+  diffYear /= (60 * 60 * 24);
+  return Math.abs(Math.floor(diffYear / 365.25));
+}
 
 const account = {
   uid: "65156cdc-5cfd-4b34-b626-49c83569f35e",
@@ -33,12 +44,18 @@ const account = {
   updateAfterDays: 30,
 };
 
-const Detail = ({}) => {
+const Detail = ({ }) => {
   let mortgage;
   const lastUpdate = new Date(account.lastUpdate);
   if (account.associatedMortgages.length) {
     mortgage = account.associatedMortgages[0];
   }
+
+  const sincePurchase = account.recentValuation.amount - account.originalPurchasePrice;
+  const sincePurchasePercentage = sincePurchase / account.originalPurchasePrice * 100;
+  const currDate = new Date();
+  const purchaseDate = new Date(account.originalPurchasePriceDate);
+  const annualAppreciation = sincePurchasePercentage / yearDiff(purchaseDate, currDate);
 
   return (
     <Inset>
@@ -72,34 +89,44 @@ const Detail = ({}) => {
           </AccountList>
         </RowContainer>
       </AccountSection>
-      {mortgage && (
-        <AccountSection>
-          <AccountLabel>Mortgage</AccountLabel>
-          <RowContainer
-            // This is a dummy action
-            onClick={() => alert("You have navigated to the mortgage page")}
-          >
-            <AccountList>
-              <AccountListItem><InfoText>
-                {new Intl.NumberFormat("en-GB", {
-                  style: "currency",
-                  currency: "GBP",
-                }).format(
-                  Math.abs(account.associatedMortgages[0].currentBalance)
-                )}
-              </InfoText></AccountListItem>
-              <AccountListItem><InfoText>{account.associatedMortgages[0].name}</InfoText></AccountListItem>
-            </AccountList>
-          </RowContainer>
-        </AccountSection>
-      )}
+      <AccountSection>
+        <AccountLabel>Valuation changes</AccountLabel>
+        <AccountList>
+          <AccountListItem><InfoText>Purchased for </InfoText><BoldInfoText>{`£${account.originalPurchasePrice.toLocaleString('en-GB')}`}</BoldInfoText><InfoText>{`in ${monthNames[purchaseDate.getMonth()]} ${purchaseDate.getFullYear()}`}</InfoText></AccountListItem>
+          <AccountListItem><InfoText>{`Since purchase`}</InfoText><Label>{`£${sincePurchase.toLocaleString('en-GB')} (${sincePurchasePercentage.toLocaleString('en-GB')}%)`}</Label></AccountListItem>
+          <AccountListItem><InfoText>{`Annual appreciation`}</InfoText><Label>{`${annualAppreciation.toLocaleString('en-GB')}%`}</Label></AccountListItem>
+        </AccountList>
+      </AccountSection>
+      {
+        mortgage && (
+          <AccountSection>
+            <AccountLabel>Mortgage</AccountLabel>
+            <RowContainer
+              // This is a dummy action
+              onClick={() => alert("You have navigated to the mortgage page")}
+            >
+              <AccountList>
+                <AccountListItem><InfoText>
+                  {new Intl.NumberFormat("en-GB", {
+                    style: "currency",
+                    currency: "GBP",
+                  }).format(
+                    Math.abs(account.associatedMortgages[0].currentBalance)
+                  )}
+                </InfoText></AccountListItem>
+                <AccountListItem><InfoText>{account.associatedMortgages[0].name}</InfoText></AccountListItem>
+              </AccountList>
+            </RowContainer>
+          </AccountSection>
+        )
+      }
       <Button
         // This is a dummy action
         onClick={() => alert("You have navigated to the edit account page")}
       >
         Edit account
       </Button>
-    </Inset>
+    </Inset >
   );
 };
 

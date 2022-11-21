@@ -26,6 +26,10 @@ export const InfoText = styled.div`
   color: ${(props) => props.theme.colors.neutral[600]};
 `;
 
+export const BoldInfoText = styled(InfoText)`
+  font-weight: bold;
+`;
+
 export const AccountSection = styled.div`
   padding: ${(props) => props.theme.space.m} 0;
 
@@ -45,4 +49,13 @@ export const AccountListItem = styled.div`
 
 export const Inset = styled.div`
   padding: 0 ${(props) => props.theme.space.m};
+`;
+
+export const Label = styled.span`
+  background-color: #c2f7e1;
+  border-radius: 25px;
+  color: #006b57;
+  padding: 0px 25px;
+  position: absolute;
+  right: 0px;
 `;
